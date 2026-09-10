@@ -30,6 +30,37 @@ function Index() {
   }, []);
 
   useEffect(() => {
+    if (!titleRef.current) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const split = new SplitText(titleRef.current.querySelectorAll("span"), {
+      type: "chars",
+      charsClass: "kitty-char",
+    });
+    if (reduce) return () => split.revert();
+
+    const tl = gsap.timeline({ delay: 0.9 });
+    tl.from(split.chars, {
+      yPercent: 120,
+      rotate: (i) => (i % 2 ? 16 : -16),
+      scale: 0.6,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(2.2)",
+      stagger: { each: 0.06, from: "center" },
+    }).to(split.chars, {
+      yPercent: -8,
+      duration: 0.7,
+      ease: "sine.inOut",
+      stagger: { each: 0.07, from: "start", yoyo: true, repeat: 1 },
+    }, "-=0.2");
+
+    return () => {
+      tl.kill();
+      split.revert();
+    };
+  }, []);
+
+  useEffect(() => {
     const onMove = (event: MouseEvent) => {
       if (!kittyRef.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const x = (event.clientX / window.innerWidth - 0.5) * 2;
