@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun, Volume2, VolumeX } from "lucide-react";
+import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -15,7 +15,6 @@ const floatingItems = [
 function Index() {
   const kittyRef = useRef<HTMLDivElement>(null);
   const [dark, setDark] = useState(false);
-  const [muted, setMuted] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [heartRain, setHeartRain] = useState(0);
 
@@ -44,19 +43,19 @@ function Index() {
 
   return (
     <main className={dark ? "kitty-site dark-mode" : "kitty-site"}>
-      <style>{`\n        @media (min-width: 700px) {\n          .hero .hero-copy { text-align: left; margin-left: -28%; }\n          .hero .eyebrow { justify-content: flex-start; }\n          .hero .kitty-stage { left: auto; right: 6%; bottom: 50%; transform: translateY(50%) rotateX(var(--my,0deg)) rotateY(var(--mx,0deg)); }\n        }\n        @media (min-width: 1100px) {\n          .hero .hero-copy { margin-left: -34%; }\n          .hero .kitty-stage { right: 8%; width: 500px; }\n        }\n        @media (max-width: 699px) {\n          .hero .kitty-stage { bottom: 4%; }\n        }\n      `}</style>
+      <style>{`\n        .nav .brand-bow { position:relative; width:22px; height:18px; display:inline-block; flex:0 0 22px; animation:brandBowFloat 3.2s ease-in-out infinite; }\n        .nav .brand-bow::before, .nav .brand-bow::after { content:''; position:absolute; top:2px; width:11px; height:14px; background:linear-gradient(145deg,#ff7f9e,#d92f55); border-radius:9px 3px 9px 3px; box-shadow:inset 0 1px rgba(255,255,255,.55),0 3px 8px rgba(180,45,85,.18); }\n        .nav .brand-bow::before { left:0; transform:rotate(22deg); }\n        .nav .brand-bow::after { right:0; transform:scaleX(-1) rotate(22deg); }\n        .nav .brand-bow span { position:absolute; left:50%; top:6px; width:7px; height:7px; transform:translateX(-50%); border-radius:50%; background:#c9234a; box-shadow:0 0 0 2px rgba(255,255,255,.5); z-index:1; }\n        @keyframes brandBowFloat { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-2px) rotate(2deg); } }\n        @media (min-width:700px) {\n          .hero .hero-copy { text-align: left; margin-left: -28%; }\n          .hero .eyebrow { justify-content: flex-start; }\n          .hero .kitty-stage { left: auto; right: 6%; bottom: 50%; transform: translateY(50%) rotateX(var(--my,0deg)) rotateY(var(--mx,0deg)); }\n        }\n        @media (min-width:1100px) {\n          .hero .hero-copy { margin-left: -34%; }\n          .hero .kitty-stage { right: 8%; width: 500px; }\n        }\n        @media (max-width:699px) {\n          .hero .kitty-stage { bottom: 4%; }\n        }\n      `}</style>
       {!loaded && <div className="loader"><div className="loader-bow">🎀</div><span>Carregando<span className="dots">...</span></span></div>}
       <nav className="nav" aria-label="Navegação principal">
-        <button className="brand" onClick={makeItRain} aria-label="Início Hello Kitty"><span className="brand-bow">🎀</span><span>Hello Kitty</span></button>
+        <button className="brand" onClick={makeItRain} aria-label="Início Hello Kitty"><span className="brand-bow" aria-hidden="true"><span /></span><span>Hello Kitty</span></button>
         <div className="nav-links"><button onClick={() => scrollTo("home")}>Início</button><button onClick={() => scrollTo("about")}>Sobre</button><button onClick={() => scrollTo("explore")}>Galeria</button></div>
-        <div className="nav-actions"><button className="icon-button" onClick={() => setMuted((v) => !v)} aria-label={muted ? "Ativar som" : "Silenciar som"}>{muted ? <VolumeX size={17} /> : <Volume2 size={17} />}</button><button className="icon-button" onClick={() => setDark((v) => !v)} aria-label="Alternar modo escuro">{dark ? <Sun size={17} /> : <Moon size={17} />}</button></div>
+        <div className="nav-actions"><button className="icon-button" onClick={() => setDark((v) => !v)} aria-label="Alternar modo escuro">{dark ? <Sun size={17} /> : <Moon size={17} />}</button></div>
       </nav>
 
       <section id="home" className="hero section-shell">
         <div className="ambient ambient-one" /><div className="ambient ambient-two" />
         {floatingItems.map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
         {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 60 }, (_, i) => <span key={i} style={{ left: `${(i * 37) % 101}%`, animationDelay: `${(i % 12) * 0.08}s`, fontSize: `${16 + (i % 5) * 4}px` }}>♥</span>)}</div>}
-        <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá, Kitty! Bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
+        <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá! Eu sou a Hello Kitty. Seja bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
         <div className="kitty-stage" ref={kittyRef}>
           <div className="kitty-shadow" />
           <img className="kitty-real" src={HELLO_KITTY_IMAGE} alt="Hello Kitty em 3D" loading="eager" fetchPriority="high" decoding="async" />
