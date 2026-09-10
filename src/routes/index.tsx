@@ -92,7 +92,7 @@ function Index() {
         <div className="ambient ambient-one" /><div className="ambient ambient-two" />
         {floatingItems.map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
         {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 60 }, (_, i) => <span key={i} style={{ left: `${(i * 37) % 101}%`, animationDelay: `${(i % 12) * 0.08}s`, fontSize: `${16 + (i % 5) * 4}px` }}>♥</span>)}</div>}
-        <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá! Eu sou a Hello Kitty. Seja bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
+        <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1 ref={titleRef}><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá! Eu sou a Hello Kitty. Seja bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
         <div className="kitty-stage" ref={kittyRef}>
           <div className="kitty-shadow" />
           <img className="kitty-real" src={HELLO_KITTY_IMAGE} alt="Hello Kitty em 3D" loading="eager" fetchPriority="high" decoding="async" />
