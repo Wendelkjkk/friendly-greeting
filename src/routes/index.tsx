@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun, Volume2, VolumeX } from "lu
 
 export const Route = createFileRoute("/")({ component: Index });
 
-const HELLO_KITTY_IMAGE = "https://i.shgcdn.com/1ec9c187-9579-42d4-be9e-f4161e8df9e1/-/format/auto/-/preview/3000x3000/-/quality/lighter/";
+const HELLO_KITTY_IMAGE = "https://pngdownload.io/download/1627/?tmstv=1702535115";
 
 const floatingItems = [
   ["♥", "8%", "20%", "0s", "1.5rem"], ["✦", "18%", "72%", "1.5s", "1rem"],
@@ -58,7 +58,7 @@ function Index() {
         <div className="hero-copy reveal"><p className="eyebrow"><span /> A little world of happiness <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Hello, Kitty! Welcome to my little world.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explore</span><ArrowDown size={18} /></button></div>
         <div className="kitty-stage" ref={kittyRef}>
           <div className="kitty-shadow" />
-          <img className="kitty-real" src={HELLO_KITTY_IMAGE} alt="Hello Kitty" loading="eager" fetchPriority="high" decoding="async" />
+          <img className="kitty-real" src={HELLO_KITTY_IMAGE} alt="Hello Kitty 3D character" loading="eager" fetchPriority="high" decoding="async" />
           <button className="kitty-bow-trigger" onClick={makeItRain} aria-label="Make hearts rain"><span>🎀</span></button>
         </div>
         <button className="scroll-cue" onClick={() => scrollTo("about")}><span>SCROLL</span><ArrowDown size={16} /></button>
