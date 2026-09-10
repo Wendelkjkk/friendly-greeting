@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun } from "lucide-react";
-import reactParallax from "react-parallax";
+import * as reactParallax from "react-parallax";
 
-const { Parallax } = reactParallax as unknown as typeof import("react-parallax");
+const { Parallax } = ((reactParallax as unknown as { default?: typeof reactParallax }).default ??
+  reactParallax);
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 
