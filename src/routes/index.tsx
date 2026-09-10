@@ -44,6 +44,7 @@ function Index() {
 
   return (
     <main className={dark ? "kitty-site dark-mode" : "kitty-site"}>
+      <style>{`\n        @media (min-width: 700px) {\n          .hero .hero-copy { text-align: left; margin-left: -28%; }\n          .hero .eyebrow { justify-content: flex-start; }\n          .hero .kitty-stage { left: auto; right: 6%; bottom: 50%; transform: translateY(50%) rotateX(var(--my,0deg)) rotateY(var(--mx,0deg)); }\n        }\n        @media (min-width: 1100px) {\n          .hero .hero-copy { margin-left: -34%; }\n          .hero .kitty-stage { right: 8%; width: 500px; }\n        }\n        @media (max-width: 699px) {\n          .hero .kitty-stage { bottom: 4%; }\n        }\n      `}</style>
       {!loaded && <div className="loader"><div className="loader-bow">🎀</div><span>Loading<span className="dots">...</span></span></div>}
       <nav className="nav" aria-label="Main navigation">
         <button className="brand" onClick={makeItRain} aria-label="Hello Kitty home"><span className="brand-bow">🎀</span><span>Hello Kitty</span></button>
@@ -54,7 +55,7 @@ function Index() {
       <section id="home" className="hero section-shell">
         <div className="ambient ambient-one" /><div className="ambient ambient-two" />
         {floatingItems.map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
-        {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 22 }, (_, i) => <span key={i}>♥</span>)}</div>}
+        {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 60 }, (_, i) => <span key={i} style={{ left: `${(i * 37) % 101}%`, animationDelay: `${(i % 12) * 0.08}s`, fontSize: `${16 + (i % 5) * 4}px` }}>♥</span>)}</div>}
         <div className="hero-copy reveal"><p className="eyebrow"><span /> A little world of happiness <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Hello, Kitty! Welcome to my little world.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explore</span><ArrowDown size={18} /></button></div>
         <div className="kitty-stage" ref={kittyRef}>
           <div className="kitty-shadow" />
