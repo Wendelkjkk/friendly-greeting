@@ -4,6 +4,8 @@ import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun, Volume2, VolumeX } from "lu
 
 export const Route = createFileRoute("/")({ component: Index });
 
+const HELLO_KITTY_IMAGE = "https://i.shgcdn.com/1ec9c187-9579-42d4-be9e-f4161e8df9e1/-/format/auto/-/preview/3000x3000/-/quality/lighter/";
+
 const floatingItems = [
   ["♥", "8%", "20%", "0s", "1.5rem"], ["✦", "18%", "72%", "1.5s", "1rem"],
   ["♡", "82%", "24%", "2.2s", "1.8rem"], ["✧", "90%", "68%", "0.8s", "1.2rem"],
@@ -54,7 +56,11 @@ function Index() {
         {floatingItems.map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
         {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 22 }, (_, i) => <span key={i}>♥</span>)}</div>}
         <div className="hero-copy reveal"><p className="eyebrow"><span /> A little world of happiness <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Hello, Kitty! Welcome to my little world.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explore</span><ArrowDown size={18} /></button></div>
-        <div className="kitty-stage" ref={kittyRef} aria-label="3D Hello Kitty illustration"><div className="kitty-shadow" /><div className="kitty-3d"><div className="ear ear-left"><span /></div><div className="ear ear-right"><span /></div><div className="kitty-head"><div className="kitty-ear-inside left" /><div className="kitty-ear-inside right" /><div className="eye left-eye" /><div className="eye right-eye" /><div className="nose" /><div className="whisker w1" /><div className="whisker w2" /><div className="whisker w3" /><div className="whisker w4" /><div className="whisker w5" /><div className="whisker w6" /><button className="kitty-bow" onClick={makeItRain} aria-label="Make hearts rain"><i /><i /><b /></button><div className="face-shine" /></div></div></div>
+        <div className="kitty-stage" ref={kittyRef}>
+          <div className="kitty-shadow" />
+          <img className="kitty-real" src={HELLO_KITTY_IMAGE} alt="Hello Kitty" loading="eager" fetchPriority="high" decoding="async" />
+          <button className="kitty-bow-trigger" onClick={makeItRain} aria-label="Make hearts rain"><span>🎀</span></button>
+        </div>
         <button className="scroll-cue" onClick={() => scrollTo("about")}><span>SCROLL</span><ArrowDown size={16} /></button>
       </section>
 
