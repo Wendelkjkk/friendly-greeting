@@ -19,6 +19,7 @@ const floatingItems = [
 
 function Index() {
   const kittyRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const [dark, setDark] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [heartRain, setHeartRain] = useState(0);
