@@ -1,6 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun } from "lucide-react";
+import * as reactParallax from "react-parallax";
+
+const { Parallax } = ((reactParallax as unknown as { default?: typeof reactParallax }).default ??
+  reactParallax);
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
+
+gsap.registerPlugin(SplitText);
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -14,6 +22,7 @@ const floatingItems = [
 
 function Index() {
   const kittyRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const [dark, setDark] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [heartRain, setHeartRain] = useState(0);
@@ -21,6 +30,37 @@ function Index() {
   useEffect(() => {
     const timer = window.setTimeout(() => setLoaded(true), 800);
     return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!titleRef.current) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const split = new SplitText(titleRef.current.querySelectorAll("span"), {
+      type: "chars",
+      charsClass: "kitty-char",
+    });
+    if (reduce) return () => split.revert();
+
+    const tl = gsap.timeline({ delay: 0.9 });
+    tl.from(split.chars, {
+      yPercent: 120,
+      rotate: (i) => (i % 2 ? 16 : -16),
+      scale: 0.6,
+      opacity: 0,
+      duration: 0.9,
+      ease: "back.out(2.2)",
+      stagger: { each: 0.06, from: "center" },
+    }).to(split.chars, {
+      yPercent: -8,
+      duration: 0.7,
+      ease: "sine.inOut",
+      stagger: { each: 0.07, from: "start", yoyo: true, repeat: 1 },
+    }, "-=0.2");
+
+    return () => {
+      tl.kill();
+      split.revert();
+    };
   }, []);
 
   useEffect(() => {
@@ -55,7 +95,7 @@ function Index() {
         <div className="ambient ambient-one" /><div className="ambient ambient-two" />
         {floatingItems.map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
         {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 60 }, (_, i) => <span key={i} style={{ left: `${(i * 37) % 101}%`, animationDelay: `${(i % 12) * 0.08}s`, fontSize: `${16 + (i % 5) * 4}px` }}>♥</span>)}</div>}
-        <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá! Eu sou a Hello Kitty. Seja bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
+        <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1 ref={titleRef}><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá! Eu sou a Hello Kitty. Seja bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
         <div className="kitty-stage" ref={kittyRef}>
           <div className="kitty-shadow" />
           <img className="kitty-real" src={HELLO_KITTY_IMAGE} alt="Hello Kitty em 3D" loading="eager" fetchPriority="high" decoding="async" />
@@ -65,6 +105,10 @@ function Index() {
       </section>
 
       <section id="about" className="about section-shell"><div className="wave wave-top" /><div className="section-heading reveal"><p className="kicker">UM POUCO DE FELICIDADE</p><h2>Só um pouco de<br /><em>felicidade.</em></h2><p>Pequenos momentos, grandes sorrisos. Um cantinho da internet feito para dias leves, corações quentinhos e tudo que é fofo.</p></div><div className="about-cards"><article className="soft-card reveal"><div className="card-icon heart-icon"><Heart fill="currentColor" /></div><span>Gentileza</span><strong>Seja sempre gentil.</strong></article><article className="soft-card reveal"><div className="card-icon bow-icon">🎀</div><span>Pequenas coisas</span><strong>Deixe o dia mais bonito.</strong></article><article className="soft-card reveal"><div className="card-icon star-icon"><Star fill="currentColor" /></div><span>Sonhos</span><strong>Continue brilhando.</strong></article></div></section>
+
+      <Parallax bgImage={HELLO_KITTY_IMAGE} bgImageAlt="Hello Kitty" strength={420} bgImageStyle={{ objectFit: "contain", opacity: 0.9 }} className="parallax-band">
+        <div className="parallax-inner"><p className="kicker">FOFURA EM MOVIMENTO</p><h2>Um mundo que<br /><em>flutua com você.</em></h2></div>
+      </Parallax>
 
       <section id="explore" className="explore section-shell"><div className="section-heading center reveal"><p className="kicker">O PEQUENO MUNDO</p><h2>O que tem no meu<br /><em>pequeno mundo?</em></h2></div><div className="explore-grid"><article className="world-card bow-card reveal" onClick={makeItRain}><div className="card-3d-object giant-bow"><span>🎀</span></div><div className="world-copy"><small>LAÇO</small><h3>LAÇO</h3><p>Um pequeno detalhe rosa que deixa tudo mais doce.</p></div></article><article className="world-card apple-card reveal"><div className="card-3d-object apple"><span>🍎</span></div><div className="world-copy"><small>MAÇÃ</small><h3>MAÇÃ</h3><p>Brilhante, divertida e sempre pronta para um piquenique.</p></div></article><article className="world-card teddy-card reveal"><div className="card-3d-object teddy"><span>🧸</span></div><div className="world-copy"><small>URSINHO</small><h3>URSINHO</h3><p>Um pequeno amigo para dias aconchegantes e sonhos leves.</p></div></article></div></section>
       <footer className="footer"><div className="footer-bow">🎀</div><p>Tenha um dia lindo <span>♥</span></p><button className="top-button" onClick={() => scrollTo("home")} aria-label="Voltar ao início"><ArrowUp size={17} /> Voltar ao início</button><p className="footer-credit">feito por Wendel</p><div className="footer-hearts" aria-hidden="true">♡　♥　✦　♡　✧　♥</div></footer>
