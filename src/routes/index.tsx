@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Heart, Moon, Star, Sun } from "lucide-react";
+import { Parallax } from "react-parallax";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
+
+gsap.registerPlugin(SplitText);
 
 export const Route = createFileRoute("/")({ component: Index });
 
