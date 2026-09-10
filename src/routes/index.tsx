@@ -6,9 +6,10 @@ import * as reactParallax from "react-parallax";
 const { Parallax } = ((reactParallax as unknown as { default?: typeof reactParallax }).default ??
   reactParallax);
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -23,6 +24,7 @@ const floatingItems = [
 function Index() {
   const kittyRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const heartsRef = useRef<HTMLDivElement>(null);
   const [dark, setDark] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [heartRain, setHeartRain] = useState(0);
@@ -75,6 +77,29 @@ function Index() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
+  useEffect(() => {
+    if (!heartsRef.current) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    const ctx = gsap.context(() => {
+      gsap.to(".scroll-heart", {
+        y: -170,
+        rotation: (i) => (i % 2 === 0 ? -8 : 8),
+        ease: "none",
+        stagger: { each: 0.025, from: "random" },
+        scrollTrigger: {
+          trigger: heartsRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }, heartsRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const makeItRain = () => {
     setHeartRain((v) => v + 1);
@@ -93,7 +118,12 @@ function Index() {
 
       <section id="home" className="hero section-shell">
         <div className="ambient ambient-one" /><div className="ambient ambient-two" />
-        {floatingItems.map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
+        <div className="scroll-hearts" ref={heartsRef} aria-hidden="true">
+          {floatingItems.filter(([icon]) => icon === "♥" || icon === "♡").map(([icon, x, y, delay, size], i) => (
+            <span key={i} className="floating-item scroll-heart" style={{ left: x, top: y, animationDelay: delay, fontSize: size }}>{icon}</span>
+          ))}
+        </div>
+        {floatingItems.filter(([icon]) => icon !== "♥" && icon !== "♡").map(([icon, x, y, delay, size], i) => <span key={i} className="floating-item" style={{ left: x, top: y, animationDelay: delay, fontSize: size }} aria-hidden="true">{icon}</span>)}
         {heartRain > 0 && <div className="heart-rain" key={heartRain} aria-hidden="true">{Array.from({ length: 60 }, (_, i) => <span key={i} style={{ left: `${(i * 37) % 101}%`, animationDelay: `${(i % 12) * 0.08}s`, fontSize: `${16 + (i % 5) * 4}px` }}>♥</span>)}</div>}
         <div className="hero-copy reveal"><p className="eyebrow"><span /> Um pequeno mundo de felicidade <span /></p><h1 ref={titleRef}><span>HELLO</span><span>KITTY</span></h1><p className="hero-subtitle">Olá! Eu sou a Hello Kitty. Seja bem-vindo ao meu pequeno mundo.</p><button className="primary-button magnetic" onClick={() => scrollTo("about")}><span>Explorar</span><ArrowDown size={18} /></button></div>
         <div className="kitty-stage" ref={kittyRef}>
